@@ -6,15 +6,18 @@ import './Chat.css'
 import InfoBar from '../InfoBar/InfoBar'
 import Messages from '../Messages/Messages'
 import Input from '../../Input/Input'
+import TextContainer from '../TextContainer/TextContainer'
+
+const ENDPOINT = 'localhost:5000'
 
 let socket
 
 const Chat = ({ location }) => {
   const [name, setName] = useState('')
   const [room, setRoom] = useState('')
+  const [users, setUsers] = useState('')
   const [message, setMessage] = useState('')
   const [messages, setMessages] = useState([])
-  const ENDPOINT = 'localhost:5000'
 
   useEffect(() => {
     const { name, room } = queryString.parse(location.search)
@@ -24,8 +27,10 @@ const Chat = ({ location }) => {
     setName(name)
     setRoom(room)
 
-    socket.emit('join', { name, room }, () => {
-
+    socket.emit('join', { name, room }, (error) => {
+      if (error) {
+        alert(error);
+      }
     })
 
     return () => {
@@ -37,8 +42,12 @@ const Chat = ({ location }) => {
 
   useEffect(() => {
     socket.on('message', (message) => {
-      setMessages([...messages, message])
+      setMessages(messages => [...messages, message])
     })
+
+    socket.on("roomData", ({ users }) => {
+      setUsers(users);
+    });
   }, [])
   console.log(messages)
 
@@ -59,6 +68,7 @@ const Chat = ({ location }) => {
         <Messages messages={messages} name={name} />
         <Input message={message} setMessage={setMessage} sendMessage={sendMessage} />
       </div>
+      <TextContainer users={users} />
     </div>
   )
 }
