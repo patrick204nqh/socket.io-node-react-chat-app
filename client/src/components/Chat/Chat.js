@@ -37,6 +37,7 @@ const Chat = ({ location }) => {
       setMessages([...messages, message])
     })
   }, [])
+  console.log(messages)
 
   const sendMessage = e => {
     e.preventDefault()
@@ -44,6 +45,9 @@ const Chat = ({ location }) => {
     if (message) {
       socket.emit('sendMessage', message, () => setMessage(''))
     }
+
+    console.log(messages)
+
   }
 
   return (
