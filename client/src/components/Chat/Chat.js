@@ -5,7 +5,7 @@ import io from 'socket.io-client'
 import './Chat.css'
 import InfoBar from '../InfoBar/InfoBar'
 import Messages from '../Messages/Messages'
-import Input from '../../Input/Input'
+import Input from '../Input/Input'
 import TextContainer from '../TextContainer/TextContainer'
 
 const ENDPOINT = 'localhost:5000'
